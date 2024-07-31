@@ -32,7 +32,7 @@ uint8_t BYTE_readData(SPI_HandleTypeDef* hspi, uint8_t data, uint16_t* address);
 HAL_StatusTypeDef BYTE_writeData(SPI_HandleTypeDef* hspi, uint8_t data, uint16_t* address);
 
 // Read and Change Mode Methods
-uint8_t MODE_read(SPI_HandleTypeDef* hspi);
+uint8_t STATUS_read(SPI_HandleTypeDef* hspi);
 HAL_StatusTypeDef MODE_write(SPI_HandleTypeDef* hspi, uint8_t mode);
 HAL_StatusTypeDef BYTE_mode(SPI_HandleTypeDef* hspi);
 HAL_StatusTypeDef PAGE_mode(SPI_HandleTypeDef* hspi);
