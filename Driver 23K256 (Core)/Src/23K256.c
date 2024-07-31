@@ -10,7 +10,6 @@
 #include <stdio.h>
 #include "23K256.h"
 
-
 /*
  * Read Function
  */
