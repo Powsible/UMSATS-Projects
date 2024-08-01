@@ -118,7 +118,7 @@ int main(void)
 	HAL_Delay(100);
 
 	// Read data that should match written data.
-	read = BYTE_readData(&hspi1, read, address);
+	read = BYTE_readData(&hspi1, address);
 	HAL_Delay(100);
 
     /* USER CODE BEGIN 3 */
