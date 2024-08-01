@@ -13,7 +13,7 @@
 /*
  * Read Function
  */
-uint8_t BYTE_readData(SPI_HandleTypeDef* hspi, uint8_t data, uint16_t* address){
+uint8_t BYTE_readData(SPI_HandleTypeDef* hspi, uint16_t* address){
 	// Turn on the chip select in active low.
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_RESET);
 
@@ -23,7 +23,7 @@ uint8_t BYTE_readData(SPI_HandleTypeDef* hspi, uint8_t data, uint16_t* address){
 	// Get the 16-bit top and bottom address.
 	uint8_t top = (*address >> 8) & 0x00FF,
 			bottom = (*address) & 0x00FF,
-			readInstruction = READ_INSTRUCTION;
+			readInstruction = READ_INSTRUCTION, dataRead;
 
 	// Select the read instruction.
 	if (HAL_SPI_Transmit(hspi, &readInstruction, NUM_BYTES, HAL_MAX_DELAY) == HAL_OK){
@@ -35,7 +35,7 @@ uint8_t BYTE_readData(SPI_HandleTypeDef* hspi, uint8_t data, uint16_t* address){
 			if (HAL_SPI_Transmit(hspi, &bottom, NUM_BYTES, HAL_MAX_DELAY) == HAL_OK){
 
 				// Receive the data.
-				HAL_SPI_Receive(hspi, &data, NUM_BYTES, HAL_MAX_DELAY);
+				HAL_SPI_Receive(hspi, &dataRead, NUM_BYTES, HAL_MAX_DELAY);
 			}
 		}
 	}
@@ -43,7 +43,7 @@ uint8_t BYTE_readData(SPI_HandleTypeDef* hspi, uint8_t data, uint16_t* address){
 	// Turn off the chip select.
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET);
 
-	return data;
+	return dataRead;
 }
 
 /*
