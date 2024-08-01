@@ -21,27 +21,30 @@ uint8_t BYTE_readData(SPI_HandleTypeDef* hspi, uint8_t data, uint16_t* address){
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
 
 	// Get the 16-bit top and bottom address.
-	uint8_t top = (*address >> 8) & 0x00FF, bottom = (*address) & 0x00FF,
+	uint8_t top = (*address >> 8) & 0x00FF,
+			bottom = (*address) & 0x00FF,
 			readInstruction = READ_INSTRUCTION;
 
 	// Select the read instruction.
-	HAL_SPI_Transmit(hspi, &readInstruction, NUM_BYTES, HAL_MAX_DELAY);
+	if (HAL_SPI_Transmit(hspi, &readInstruction, NUM_BYTES, HAL_MAX_DELAY) == HAL_OK){
 
-	// Transmit the upper byte of the address.
-	HAL_SPI_Transmit(hspi, &top, NUM_BYTES, HAL_MAX_DELAY);
+		// Transmit the upper byte of the address.
+		if (HAL_SPI_Transmit(hspi, &top, NUM_BYTES, HAL_MAX_DELAY) == HAL_OK){
 
-	// Transmit the lower byte of the address.
-	HAL_SPI_Transmit(hspi, &bottom, NUM_BYTES, HAL_MAX_DELAY);
+			// Transmit the lower byte of the address.
+			if (HAL_SPI_Transmit(hspi, &bottom, NUM_BYTES, HAL_MAX_DELAY) == HAL_OK){
 
-	// Receive the data.
-	HAL_SPI_Receive(hspi, &data, NUM_BYTES, HAL_MAX_DELAY);
+				// Receive the data.
+				HAL_SPI_Receive(hspi, &data, NUM_BYTES, HAL_MAX_DELAY);
+			}
+		}
+	}
 
 	// Turn off the chip select.
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET);
 
 	return data;
 }
-
 
 /*
  * Write Function
@@ -54,7 +57,8 @@ HAL_StatusTypeDef BYTE_writeData(SPI_HandleTypeDef* hspi, uint8_t data, uint16_t
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
 
 	// Get the 16-bit top and bottom address.
-	uint8_t top = (*address >> 8) & 0x00FF, bottom = (*address) & 0x00FF,
+	uint8_t top = (*address >> 8) & 0x00FF,
+			bottom = (*address) & 0x00FF,
 			writeInstruction = WRITE_INSTRUCTION;
 
 	// Select the write instruction.
@@ -81,7 +85,6 @@ HAL_StatusTypeDef BYTE_writeData(SPI_HandleTypeDef* hspi, uint8_t data, uint16_t
 	return status;
 }
 
-
 /*
  * MODE read.
  */
@@ -95,17 +98,17 @@ uint8_t STATUS_read(SPI_HandleTypeDef* hspi){
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_5, GPIO_PIN_RESET);
 
 	// Select the read status.
-	HAL_SPI_Transmit(hspi, &readStatus, NUM_BYTES, HAL_MAX_DELAY);
+	if (HAL_SPI_Transmit(hspi, &readStatus, NUM_BYTES, HAL_MAX_DELAY) == HAL_OK){
 
-	// Receive the status.
-	HAL_SPI_Receive(hspi, &status, NUM_BYTES, HAL_MAX_DELAY);
+		// Receive the status.
+		HAL_SPI_Receive(hspi, &status, NUM_BYTES, HAL_MAX_DELAY);
+	}
 
 	// Turn off the chip select.
 	HAL_GPIO_WritePin(GPIOB, GPIO_PIN_6, GPIO_PIN_SET);
 
 	return status;
 }
-
 
 /*
  * MODE write.
@@ -132,7 +135,6 @@ HAL_StatusTypeDef MODE_write(SPI_HandleTypeDef* hspi, uint8_t mode){
 	return status;
 }
 
-
 /*
  * BYTE status.
  */
@@ -141,7 +143,6 @@ HAL_StatusTypeDef BYTE_mode(SPI_HandleTypeDef* hspi){
 	return MODE_write(hspi, byte);
 }
 
-
 /*
  * PAGE status.
  */
@@ -149,7 +150,6 @@ HAL_StatusTypeDef PAGE_mode(SPI_HandleTypeDef* hspi){
 	uint8_t page = PAGE_MODE;
 	return MODE_write(hspi, page);
 }
-
 
 /*
  * SEQUENTIAL status.
