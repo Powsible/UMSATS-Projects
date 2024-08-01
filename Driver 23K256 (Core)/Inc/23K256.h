@@ -28,7 +28,7 @@
 #define NUM_BYTES  0x01
 
 // Read and Write Instruction Methods
-uint8_t BYTE_readData(SPI_HandleTypeDef* hspi, uint8_t data, uint16_t* address);
+uint8_t BYTE_readData(SPI_HandleTypeDef* hspi, uint16_t* address);
 HAL_StatusTypeDef BYTE_writeData(SPI_HandleTypeDef* hspi, uint8_t data, uint16_t* address);
 
 // Read and Change Mode Methods
