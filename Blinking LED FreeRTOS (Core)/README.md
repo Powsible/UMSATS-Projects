@@ -1,0 +1,1 @@
+This project demonstrates a blinking LED application using the STM32L452RE Nucleo board, utilizing FreeRTOS tasks to manage the LED blinking. It serves as an introductory project for those new to embedded programming, the STM32 platform, and real-time operating systems like FreeRTOS.
